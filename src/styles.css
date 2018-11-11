@@ -3,3 +3,5 @@
 /* p {
     border: 5px solid blue;
 } */
+
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
