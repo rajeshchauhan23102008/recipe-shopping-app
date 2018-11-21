@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 
 
 @Component({
@@ -6,10 +6,5 @@ import { Component, Output, EventEmitter } from '@angular/core';
     templateUrl: './header.component.html'
 })
 export class HeaderComponent {
-
-    @Output() headerClick = new EventEmitter<string>();
-
-    onHeaderClick(menuSelected: string) { this.headerClick.emit(menuSelected); }
-
 
 }

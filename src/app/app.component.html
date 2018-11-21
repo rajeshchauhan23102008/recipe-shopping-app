@@ -1,10 +1,10 @@
-<app-header (headerClick)="onHeaderClick($event);"></app-header>
+<app-header></app-header>
 <div>
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <app-recipes *ngIf="menuSelected === 'recipes'" ></app-recipes>
-        <app-shopping-list *ngIf="menuSelected === 'shopping-list'" ></app-shopping-list>
+        <app-recipes></app-recipes>
+        <app-shopping-list></app-shopping-list>
     </div>
   </div>
 </div>
