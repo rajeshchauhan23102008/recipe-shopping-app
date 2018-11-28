@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 
 @Component({
@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class HeaderComponent {
 
+    @Output() menuClicked = new EventEmitter<string>();
+
+    displayFeature(event: any) {
+        this.menuClicked.emit((<HTMLAnchorElement>event.target).name);
+    }
 }
