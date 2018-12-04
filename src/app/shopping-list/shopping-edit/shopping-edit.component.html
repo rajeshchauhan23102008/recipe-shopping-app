@@ -1,14 +1,16 @@
 <div class="row">
     <div class="col-12">
-        <form>
+        <form #ShoppingEditForm="ngForm" (ngSubmit)="addNewIngredient()">
             <div class="row">
                 <div class="col-5 form-group">
                     <label for="name">Name</label>
-                    <input type="text" id="name" required name="name" class="form-control">
+                    <input type="text" id="name" required name="name" class="form-control" 
+                    #nameInput>
                 </div>
                 <div class="col-2 form-group">
                     <label for="amount">Amount</label>
-                    <input type="number" class="form-control" id="amount" required name="amount">
+                    <input type="number" class="form-control" id="amount" required name="amount" 
+                    #amountInput>
                 </div>
 
             </div>
