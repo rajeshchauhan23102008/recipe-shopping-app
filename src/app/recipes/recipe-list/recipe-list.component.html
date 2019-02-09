@@ -7,8 +7,22 @@
     <div class="col-12">
         <app-recipe-item 
             [recipeFromListComp]="recipe" 
+            *ngFor="let recipe of recipes">
+        </app-recipe-item>>
+    </div>
+</div>
+
+<!-- <div class="row mt-3 mb-4">
+    <div class="col-12">
+        <button class="btn btn-success">New Recipe</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <app-recipe-item 
+            [recipeFromListComp]="recipe" 
             *ngFor="let recipe of recipes"
             (onRecipeSelected)="onRecipeItemSelection(recipe);">
         </app-recipe-item>>
     </div>
-</div>
+</div> -->

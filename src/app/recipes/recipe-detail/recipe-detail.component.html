@@ -1,11 +1,7 @@
-<div class="container">
+<div class="container m-3">
   <div class="row">
     <div class="col-12">
-      <img 
-        [src]="selectedRecipe.imagePath"  
-        alt={{selectedRecipe.name}} 
-        class="img-responsive"
-        style="max-height: 50px" >
+      <img [src]="selectedRecipe.imagePath" alt={{selectedRecipe.name}} class="img-responsive" style="max-height: 50px">
     </div>
   </div>
   <div class="row">
@@ -21,7 +17,7 @@
         </button>
         <ul class="dropdown-menu" *dropdownMenu>
           <li>
-            <a href="#" class="dropdown-item">To Shopping List</a>
+            <a class="dropdown-item" href="#" (click)="toShoppingList();">To Shopping List</a>
             <a href="#" class="dropdown-item">Edit Recipe</a>
             <a href="#" class="dropdown-item">Delete Recipe</a>
           </li>
@@ -36,7 +32,10 @@
   </div>
   <div class="row">
     <div class="col-12">
-      Ingredients
+      <h5>Ingredients</h5>
+      <ul class="list-group" >
+        <li class="list-group-item" *ngFor="let ingredient of selectedRecipe.ingredients">{{ ingredient.name }}</li>
+      </ul>
     </div>
   </div>
 </div>
