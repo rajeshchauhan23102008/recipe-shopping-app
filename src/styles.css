@@ -5,3 +5,7 @@
 } */
 
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
+.cursor-pointer{
+    cursor: pointer;
+}

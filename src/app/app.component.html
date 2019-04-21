@@ -1,10 +1,9 @@
-<app-header (menuClicked) = "displayFeature($event);"></app-header>
+<app-header></app-header>
 <div>
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <app-recipes *ngIf= "displayFeatureName === 'recipes'"></app-recipes>
-        <app-shopping-list *ngIf="displayFeatureName === 'shopping-list'"></app-shopping-list>
+        <router-outlet></router-outlet>
     </div>
   </div>
 </div>

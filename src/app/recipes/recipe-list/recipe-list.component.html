@@ -1,13 +1,14 @@
 <div class="row mt-3 mb-4">
     <div class="col-12">
-        <button class="btn btn-success">New Recipe</button>
+        <button class="btn btn-success" (click)="newRecipe()">New Recipe</button>
     </div>
 </div>
 <div class="row">
     <div class="col-12">
         <app-recipe-item 
             [recipeFromListComp]="recipe" 
-            *ngFor="let recipe of recipes">
+            [recipeIndex]="i"
+            *ngFor="let recipe of recipes; let i = index;">
         </app-recipe-item>>
     </div>
 </div>

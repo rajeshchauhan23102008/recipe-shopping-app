@@ -1,11 +1,11 @@
 <p>
-  <a href="#" (click)="onRecipeSelection();" class="list-group-item clearfix" >
-    <div class="float-left">
-        <h4 class="list-group-item-heading font-weight-bold">{{recipe.name}}</h4>
-        <p class="list-group-item-text">{{recipe.description}}</p>
-    </div>
-    <span class="float-right">
-        <img [src]="recipe.imagePath" style="max-height: 50px;" [alt]="recipe.name" class="img-responsive">
-    </span>
-</a>
+    <a routerLinkActive="active" [routerLink]="[recipeIndex]" class="list-group-item clearfix">
+        <div class="float-left">
+            <h4 class="list-group-item-heading font-weight-bold">{{recipe.name}}</h4>
+            <p class="list-group-item-text">{{recipe.description}}</p>
+        </div>
+        <span class="float-right">
+            <img [src]="recipe.imagePath" style="max-height: 50px;" [alt]="recipe.name" class="img-responsive">
+        </span>
+    </a>
 </p>

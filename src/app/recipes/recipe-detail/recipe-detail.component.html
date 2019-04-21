@@ -17,9 +17,9 @@
         </button>
         <ul class="dropdown-menu" *dropdownMenu>
           <li>
-            <a class="dropdown-item" href="#" (click)="toShoppingList();">To Shopping List</a>
-            <a href="#" class="dropdown-item">Edit Recipe</a>
-            <a href="#" class="dropdown-item">Delete Recipe</a>
+            <a class="dropdown-item" (click)="toShoppingList();">To Shopping List</a>
+            <a (click)="editRecipe()" class="dropdown-item cursor-pointer">Edit Recipe</a>
+            <a class="cursor-pointer dropdown-item">Delete Recipe</a>
           </li>
         </ul>
       </div>

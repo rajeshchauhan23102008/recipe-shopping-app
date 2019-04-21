@@ -7,9 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  displayFeatureName: string = 'recipes';
-
-  displayFeature(event: string) {
-    this.displayFeatureName = event;
-  }
 }
