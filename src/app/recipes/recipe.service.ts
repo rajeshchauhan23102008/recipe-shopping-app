@@ -1,7 +1,7 @@
 import { Recipe } from '../recipes/recipe.model';
 import { Ingredient } from '../shared/ingredient.model';
 
-import { EventEmitter } from '@angular/core';
+// import { EventEmitter } from '@angular/core';
 
 export class RecipeService {
     private recipes: Recipe[] = [
@@ -19,7 +19,7 @@ export class RecipeService {
             ])
     ];
 
-    onRecipeSelected = new EventEmitter<Recipe>();
+    // onRecipeSelected = new EventEmitter<Recipe>();
 
     getRecipes() {
         return this.recipes.slice();

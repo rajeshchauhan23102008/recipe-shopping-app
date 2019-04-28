@@ -1,5 +1,6 @@
 import { Ingredient } from '../shared/ingredient.model';
-import { EventEmitter } from '@angular/core';
+// import { EventEmitter } from '@angular/core';
+import { Subject } from 'rxjs';
 
 export class ShoppingListService {
 
@@ -9,7 +10,9 @@ export class ShoppingListService {
     ];
 
     //ingredientListUpdated = new EventEmitter();
-    ingredientListUpdated = new EventEmitter<Ingredient[]>();
+    // ingredientListUpdated = new EventEmitter<Ingredient[]>();
+    ingredientListUpdated = new Subject<Ingredient[]>();
+
 
     getIngredients() {
         return this.ingredients.slice();
@@ -17,13 +20,15 @@ export class ShoppingListService {
 
     addIngredient(ingredient: Ingredient) {
 
-        console.log(this.ingredients['name'].indexOf(ingredient.name));
+        // console.log(this.ingredients['name'].indexOf(ingredient.name));
 
         //validation for duplicate ingredient.
         if (this.ingredients.indexOf(ingredient) === -1) {
             this.ingredients.push(ingredient);
             //this.ingredientListUpdated.emit();
-            this.ingredientListUpdated.emit(this.ingredients.slice());
+            // this.ingredientListUpdated.emit(this.ingredients.slice());
+            this.ingredientListUpdated.next(this.ingredients.slice());
+
         }
 
     }
@@ -41,7 +46,9 @@ export class ShoppingListService {
 
         this.ingredients.push(...ingredients);
         //this.ingredientListUpdated.emit();
-        this.ingredientListUpdated.emit(this.ingredients.slice());
+        // this.ingredientListUpdated.emit(this.ingredients.slice());
+        this.ingredientListUpdated.next(this.ingredients.slice());
+
     }
 
 
