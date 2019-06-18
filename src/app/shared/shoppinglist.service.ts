@@ -18,18 +18,44 @@ export class ShoppingListService {
         return this.ingredients.slice();
     }
 
+    getIngredient(index: number) {
+        return this.ingredients[index];
+    }
+
+    updateIngredient(ingredient: Ingredient, index: number) {
+
+        // Find Ingredient based on Index.
+
+        let updateIngredient = this.ingredients[index];
+
+        updateIngredient.name = ingredient.name;
+        updateIngredient.amount = ingredient.amount;
+
+        this.ingredientListUpdated.next(this.getIngredients());
+    }
+
     addIngredient(ingredient: Ingredient) {
 
         // console.log(this.ingredients['name'].indexOf(ingredient.name));
 
         //validation for duplicate ingredient.
-        if (this.ingredients.indexOf(ingredient) === -1) {
-            this.ingredients.push(ingredient);
-            //this.ingredientListUpdated.emit();
-            // this.ingredientListUpdated.emit(this.ingredients.slice());
-            this.ingredientListUpdated.next(this.ingredients.slice());
+        if (!this.ingredients.find(
+            (value) => {
+                return value.name === ingredient.name
+            })) {
 
+            this.ingredients.push(ingredient);
+            this.ingredientListUpdated.next(this.getIngredients());
         }
+
+        //validation for duplicate ingredient.
+        // if (this.ingredients.indexOf(ingredient) === -1) {
+        //     this.ingredients.push(ingredient);
+        //     //this.ingredientListUpdated.emit();
+        //     // this.ingredientListUpdated.emit(this.ingredients.slice());
+        //     this.ingredientListUpdated.next(this.ingredients.slice());
+
+        // }
 
     }
 
@@ -47,7 +73,7 @@ export class ShoppingListService {
         this.ingredients.push(...ingredients);
         //this.ingredientListUpdated.emit();
         // this.ingredientListUpdated.emit(this.ingredients.slice());
-        this.ingredientListUpdated.next(this.ingredients.slice());
+        this.ingredientListUpdated.next(this.getIngredients());
 
     }
 
