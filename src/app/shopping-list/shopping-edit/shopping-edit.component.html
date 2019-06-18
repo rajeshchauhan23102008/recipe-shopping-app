@@ -1,25 +1,25 @@
 <div class="row">
     <div class="col-12">
-        <form #seForm="ngForm" (ngSubmit)="addNewIngredient(seForm)">
+        <form #seForm="ngForm" (ngSubmit)="onSubmit(seForm)">
             <div class="row">
                 <div class="col-5 form-group">
                     <label for="name">Name</label>
-                    <input type="text" id="name" required name="name" class="form-control" 
-                    ngModel >
+                    <input tabindex="0" type="text" id="name" required name="name" class="form-control" ngModel>
                 </div>
                 <div class="col-2 form-group">
                     <label for="amount">Amount</label>
-                    <input type="number" class="form-control" id="amount" required name="amount" 
-                    ngModel pattern="^[1-9]+[0-9]*$" >
+                    <input type="number" class="form-control" id="amount" required name="amount" ngModel
+                        pattern="^[1-9]+[0-9]*$">
                 </div>
 
             </div>
 
             <div class="row">
                 <div class="col-12 form-group">
-                    <button class="btn btn-success ml-2" type="submit" [disabled] = "!seForm.valid" #submitBtn></button>
-                    <button class="btn btn-success ml-2" type="button">Delete</button>
-                    <button class="btn btn-primary ml-2" type="button">Clear</button>
+                    <button class="btn btn-success ml-2" type="submit" [disabled]="!seForm.valid"
+                        #submitBtn>{{ editMode ? 'Edit' : 'Add' }}</button>
+                    <button class="btn btn-success ml-2" type="button" (click)="onDelete()" *ngIf="editMode">Delete</button>
+                    <button class="btn btn-primary ml-2" type="button" (click)="onClear()">Clear</button>
                 </div>
             </div>
 

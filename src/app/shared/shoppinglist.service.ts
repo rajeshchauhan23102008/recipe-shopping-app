@@ -12,7 +12,7 @@ export class ShoppingListService {
     //ingredientListUpdated = new EventEmitter();
     // ingredientListUpdated = new EventEmitter<Ingredient[]>();
     ingredientListUpdated = new Subject<Ingredient[]>();
-
+    onIngredientEdit = new Subject<number>();
 
     getIngredients() {
         return this.ingredients.slice();
@@ -24,14 +24,24 @@ export class ShoppingListService {
 
     updateIngredient(ingredient: Ingredient, index: number) {
 
-        // Find Ingredient based on Index.
+        // Validation: Duplicate Ingredient Check.
+        if (!this.ingredients.find((value) => value.name === ingredient.name)) {
 
-        let updateIngredient = this.ingredients[index];
+            // Find Ingredient based on Index.
+            let updateIngredient = this.ingredients[index];
 
-        updateIngredient.name = ingredient.name;
-        updateIngredient.amount = ingredient.amount;
+            updateIngredient.name = ingredient.name;
+            updateIngredient.amount = ingredient.amount;
 
-        this.ingredientListUpdated.next(this.getIngredients());
+            this.ingredientListUpdated.next(this.getIngredients());
+        }
+    }
+
+    deleteIngredient(index: number) {
+        if (this.ingredients[index]) {
+            this.ingredients.splice(index, 1);
+            this.ingredientListUpdated.next(this.getIngredients());
+        }
     }
 
     addIngredient(ingredient: Ingredient) {
