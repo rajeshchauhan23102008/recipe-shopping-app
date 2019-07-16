@@ -2,8 +2,12 @@ import { Recipe } from '../recipes/recipe.model';
 import { Ingredient } from '../shared/ingredient.model';
 
 // import { EventEmitter } from '@angular/core';
+import { Subject } from 'rxjs';
 
 export class RecipeService {
+
+    recipesUpdated = new Subject<Recipe[]>();
+
     private recipes: Recipe[] = [
         new Recipe('Power Pork Meat', 'Power pork meat recipe',
             'https://c.pxhere.com/photos/8b/0f/food_meat_recipe_power_pork_dishes-604134.jpg!d',
@@ -19,6 +23,9 @@ export class RecipeService {
             ])
     ];
 
+    // samosa imagePath
+    //https://upload.wikimedia.org/wikipedia/commons/c/cb/Samosachutney.jpg
+
     // onRecipeSelected = new EventEmitter<Recipe>();
 
     getRecipes() {
@@ -27,5 +34,21 @@ export class RecipeService {
 
     getRecipe(index: number) {
         return this.recipes.slice()[index];
+    }
+
+    addRecipe(newRecipe: Recipe) {
+        this.recipes.push(newRecipe);
+        this.recipesUpdated.next(this.recipes.slice());
+
+    }
+
+    updateRecipe(recipe: Recipe, index: number) {
+        this.recipes[index] = recipe;
+        this.recipesUpdated.next(this.recipes.slice());
+    }
+
+    deleteRecipe(index: number) {
+        this.recipes.splice(index, 1);
+        this.recipesUpdated.next(this.recipes.slice());
     }
 }

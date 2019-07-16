@@ -1,7 +1,7 @@
 <div class="container m-3">
   <div class="row">
     <div class="col-12">
-      <img [src]="selectedRecipe.imagePath" alt={{selectedRecipe.name}} class="img-responsive" style="max-height: 50px">
+      <img [src]="selectedRecipe.imagePath" alt={{selectedRecipe.name}} class="img-fluid" >
     </div>
   </div>
   <div class="row">
@@ -17,9 +17,9 @@
         </button>
         <ul class="dropdown-menu" *dropdownMenu>
           <li>
-            <a class="dropdown-item" (click)="toShoppingList();">To Shopping List</a>
+            <a class="dropdown-item cursor-pointer" (click)="toShoppingList();">To Shopping List</a>
             <a (click)="editRecipe()" class="dropdown-item cursor-pointer">Edit Recipe</a>
-            <a class="cursor-pointer dropdown-item">Delete Recipe</a>
+            <a class="cursor-pointer dropdown-item" (click)="onDeleteRecipe()">Delete Recipe</a>
           </li>
         </ul>
       </div>
