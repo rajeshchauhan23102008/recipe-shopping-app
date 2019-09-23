@@ -36,7 +36,7 @@
                 <div class="col" formArrayName="ingredients">
                     <h5>Ingredients</h5>
                     <div class="row mb-1"
-                        *ngFor="let ingredient of recipeAddEditForm.get('ingredients').controls; let i=index"
+                        *ngFor="let ingredient of formIngredients.controls; let i=index"
                         [formGroupName]="i">
                         <div class="col-7">
                             <input type="text" placeholder="name" formControlName="name" class="form-control">

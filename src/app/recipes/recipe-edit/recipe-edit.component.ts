@@ -21,6 +21,10 @@ export class RecipeEditComponent implements OnInit {
 
     }
 
+    get formIngredients() {
+        return (<FormArray>this.recipeAddEditForm.get('ingredients'));
+    }
+
     ngOnInit() {
         this.activatedRoute.params.subscribe(
             (params: Params) => {
@@ -109,6 +113,8 @@ export class RecipeEditComponent implements OnInit {
             'amount': new FormControl(null, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)])
         }));
     }
+
+
 
 
 }
