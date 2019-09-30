@@ -7,15 +7,22 @@ import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.com
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
 
+import { RecipeResolver } from './shared/recipe.resolver';
+
 const routes: Routes =
     [
         { path: '', redirectTo: '/recipes', pathMatch: 'full' },
-        { path: 'recipes', component: RecipesComponent, children : [
-            { path: '', component: RecipeStartComponent },
-            { path: 'new', component: RecipeEditComponent },
-            { path: ':id', component: RecipeDetailComponent},
-            { path: ':id/edit', component: RecipeEditComponent}
-        ] },
+        {
+            path: 'recipes',
+            component: RecipesComponent,
+            children: [
+                { path: '', component: RecipeStartComponent, resolve: [RecipeResolver] },
+                { path: 'new', component: RecipeEditComponent },
+                { path: ':id', component: RecipeDetailComponent, resolve: [RecipeResolver] },
+                { path: ':id/edit', component: RecipeEditComponent, resolve: [RecipeResolver] }
+            ]
+            // resolve: [RecipeResolver]
+        },
         { path: 'shopping-list', component: ShoppingListComponent },
         { path: '**', redirectTo: '/recipes' },
     ];

@@ -15,8 +15,8 @@
         <a class="nav-link dropdown-toggle cursor-pointer" dropdownToggle id="dropdown01" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">Manage</a>
         <div class="dropdown-menu" aria-labelledby="dropdown01" *dropdownMenu>
-          <a class="dropdown-item cursor-pointer" >Save Data</a>
-          <a class="dropdown-item cursor-pointer" >Fetch Data</a>
+          <a class="dropdown-item cursor-pointer" (click)="saveDataToDB()" >Save Data</a>
+          <a class="dropdown-item cursor-pointer" (click)="fetchDataFromDB()" >Fetch Data</a>
         </div>
       </li>
     </ul>

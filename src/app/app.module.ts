@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -16,9 +17,10 @@ import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.compon
 
 import { DropdownDirective } from './shared/dropdown.directive';
 import { ShoppingListService } from './shared/shoppinglist.service';
+// import { DataStorageService } from './shared/data-storage.service';
+
 import { RecipeService } from './recipes/recipe.service';
 import { AppRoutingModule } from './app-routing.module';
-import { fromEventPattern } from 'rxjs';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,8 @@ import { fromEventPattern } from 'rxjs';
     BsDropdownModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [ShoppingListService, RecipeService],
   bootstrap: [AppComponent]
