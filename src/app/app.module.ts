@@ -14,6 +14,8 @@ import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.com
 import { RecipeItemComponent } from './recipes/recipe-list/recipe-item/recipe-item.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
+import { AuthComponent } from './auth/auth.component';
+import { LoaderComponent } from './shared/loader/loader.component';
 
 import { DropdownDirective } from './shared/dropdown.directive';
 import { ShoppingListService } from './shared/shoppinglist.service';
@@ -34,7 +36,9 @@ import { AppRoutingModule } from './app-routing.module';
     RecipeItemComponent,
     DropdownDirective,
     RecipeEditComponent,
-    RecipeStartComponent
+    RecipeStartComponent,
+    AuthComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

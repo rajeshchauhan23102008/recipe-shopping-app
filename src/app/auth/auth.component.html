@@ -1,0 +1,36 @@
+<div class="row m-3">
+    <div class="col-12">
+        <div>
+            <app-loader *ngIf="isLoading"></app-loader>
+            <div class="alert alert-danger" *ngIf="error">
+                <p>{{ error }}</p>
+            </div>
+            <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
+                <!-- <div *ngIf="!authForm.valid && authForm.touched">
+                    <p class="text-danger">Please fill complete form with correct values.</p>
+                </div> -->
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" name="email" ngModel #email="ngModel" email required>
+                    <div class="alert alert-danger" *ngIf="email.invalid && email.touched">
+                        <p>Invalid Email Id</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" #password="ngModel" class="form-control" ngModel name="password" required
+                        minlength="6">
+                    <div class="alert alert-danger" *ngIf="password.invalid && password.touched">
+                        <p>Invalid Password!!!</p>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-primary m-3" type="submit"
+                        [disabled]="authForm.invalid">{{ isLogin ? 'Login' : 'Sign Up'}}</button>
+                    <button class="btn btn-info" type="button" (click)="onSwitch()">Switch to
+                        {{ isLogin ? 'Sign UP' : 'Login'}}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
