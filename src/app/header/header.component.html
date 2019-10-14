@@ -3,23 +3,27 @@
     <a class="navbar-brand" routerLink="/">Recipe Book</a>
 
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item" routerLinkActive="active">
+      <li class="nav-item" routerLinkActive="active" *ngIf="user">
         <a class="nav-link" routerLink="/recipes" name="recipes">Recipes</a>
       </li>
-      <li class="nav-item" routerLinkActive="active">
+      <!-- <li class="nav-item" routerLinkActive="active" *ngIf="!user">
         <a routerLink="/auth" class="nav-link">Authenticate</a>
-      </li>
-      <li class="nav-item" routerLinkActive="active">
+      </li> -->
+      <li class="nav-item" routerLinkActive="active" *ngIf="user">
         <a class="nav-link" routerLink="/shopping-list" name="shopping-list">Shopping List</a>
       </li>
     </ul>
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ml-auto" *ngIf="user">
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link cursor-pointer" (click)="onLogout()">Logout</a>
+
+      </li>
       <li class="nav-item dropdown" dropdown>
         <a class="nav-link dropdown-toggle cursor-pointer" dropdownToggle id="dropdown01" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">Manage</a>
         <div class="dropdown-menu" aria-labelledby="dropdown01" *dropdownMenu>
-          <a class="dropdown-item cursor-pointer" (click)="saveDataToDB()" >Save Data</a>
-          <a class="dropdown-item cursor-pointer" (click)="fetchDataFromDB()" >Fetch Data</a>
+          <a class="dropdown-item cursor-pointer" (click)="saveDataToDB()">Save Data</a>
+          <a class="dropdown-item cursor-pointer" (click)="fetchDataFromDB()">Fetch Data</a>
         </div>
       </li>
     </ul>

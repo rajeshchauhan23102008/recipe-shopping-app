@@ -1,21 +1,28 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthService } from './auth.service';
+import { AuthService, AuthResponse } from './auth.service';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-auth',
     templateUrl: './auth.component.html'
 })
-export class AuthComponent {
+export class AuthComponent implements OnInit {
 
     isLogin: boolean = true;
     isLoading: boolean = false;
-    error: string;
+    error: string = '';
+    private authObs: Observable<AuthResponse>;
 
     // @ViewChild('authForm', { static: true }) authForm: NgForm;
 
-    constructor(private authService: AuthService) {
+    constructor(private authService: AuthService, private router: Router) {
         // console.log(this.authForm);
+    }
+
+    ngOnInit() {
+
     }
 
     onSubmit(authForm: NgForm) {
@@ -25,8 +32,13 @@ export class AuthComponent {
         // window.authForm = authForm;
 
 
+
         if (this.isLogin) {
             // TODO - User Login.
+
+            this.isLoading = true;
+
+            this.authObs = this.authService.login(authForm.value.email, authForm.value.password);
 
         } else {
             // TODO - User SignUp.
@@ -36,18 +48,25 @@ export class AuthComponent {
 
             this.isLoading = true;
 
-            this.authService.signUp(authForm.value.email, authForm.value.password).subscribe(
-                response => {
-                    console.log(response);
-                    this.isLoading = false;
-                    authForm.reset();
-                }, errorMsg => {
-                    console.log(errorMsg);
-                    this.isLoading = false;
-                    this.error = errorMsg;
-                }
-            );
+            this.authObs = this.authService.signUp(authForm.value.email, authForm.value.password);
         }
+
+        this.authObs.subscribe(
+            response => {
+                this.isLoading = false;
+                authForm.reset();
+                // console.log(response);
+                this.error = '';
+
+                this.router.navigate(['/recipes']);
+
+            },
+            errorMsg => {
+                this.isLoading = false;
+                // console.log(errorMsg);
+                this.error = errorMsg;
+            }
+        );
 
     }
 

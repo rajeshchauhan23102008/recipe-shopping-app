@@ -6,6 +6,8 @@
                 <p>{{ error }}</p>
             </div>
             <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
+
+                <h1 class="text-center">{{ isLogin ? 'Login' : 'Sign Up'}}</h1>
                 <!-- <div *ngIf="!authForm.valid && authForm.touched">
                     <p class="text-danger">Please fill complete form with correct values.</p>
                 </div> -->
