@@ -5,90 +5,148 @@ import { throwError, BehaviorSubject } from 'rxjs';
 import { User } from './user.model';
 import { Router } from '@angular/router';
 
-
 export interface AuthResponse {
-    idToken: string;
-    email: string;
-    refreshToken: string;
-    expiresIn: string;
-    localId: string;
-    registered?: boolean;
+  idToken: string;
+  email: string;
+  refreshToken: string;
+  expiresIn: string;
+  localId: string;
+  registered?: boolean;
 }
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AuthService {
+  userAuthenticated: BehaviorSubject<User> = new BehaviorSubject<User>(null);
+  autoLogoutTimer: any;
 
-    userAuthenticated: BehaviorSubject<User> = new BehaviorSubject<User>(null);
+  constructor(private httpClient: HttpClient, private router: Router) {}
 
-    constructor(private httpClient: HttpClient, private router: Router) { }
+  signUp(email: string, password: string) {
+    return this.httpClient
+      .post<AuthResponse>(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCLQeGzOjJOJWZr81XoaixJL4wsZEIyc8k',
+        { email: email, password: password, returnSecureToken: true }
+      )
+      .pipe(
+        catchError(this.handleError),
+        tap(response => {
+          // console.log(response);
+          this.getAuthenticatedUser(response);
+        })
+      );
+  }
 
-    signUp(email: string, password: string) {
+  login(email: string, password: string) {
+    return this.httpClient
+      .post<AuthResponse>(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCLQeGzOjJOJWZr81XoaixJL4wsZEIyc8k',
+        { email: email, password: password, returnSecureToken: true }
+      )
+      .pipe(
+        catchError(this.handleError),
+        tap(response => {
+          // console.log(response);
+          this.getAuthenticatedUser(response);
+        })
+      );
+  }
 
-        return this.httpClient
-            .post<AuthResponse>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCLQeGzOjJOJWZr81XoaixJL4wsZEIyc8k',
-                { email: email, password: password, returnSecureToken: true })
-            .pipe(catchError(this.handleError), tap(response => {
-                // console.log(response);
-                this.getAuthenticatedUser(response);
-            }));
+  autoLogin() {
+    const stringfyUserData = localStorage.getItem('userData');
+
+    if (stringfyUserData) {
+      const userObj = JSON.parse(stringfyUserData);
+
+      const expirationDate = new Date(userObj._tokenExpirationDate);
+
+      const user = new User(
+        userObj.email,
+        userObj.Id,
+        userObj._token,
+        expirationDate
+      );
+
+      console.log(user);
+
+      // set autologout().
+      const expirationTimeInMilliSeconds =
+        expirationDate.getTime() - new Date().getTime();
+
+      this.autoLogout(expirationTimeInMilliSeconds);
+
+      this.userAuthenticated.next(user);
+    }
+  }
+
+  logout() {
+    localStorage.removeItem('userData');
+    this.userAuthenticated.next(null);
+    this.router.navigate(['/auth']);
+
+    if (this.autoLogoutTimer) {
+      clearTimeout(this.autoLogoutTimer);
     }
 
-    login(email: string, password: string) {
+    this.autoLogoutTimer = null;
+  }
 
-        return this.httpClient
-            .post<AuthResponse>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCLQeGzOjJOJWZr81XoaixJL4wsZEIyc8k',
-                { email: email, password: password, returnSecureToken: true })
-            .pipe(
-                catchError(this.handleError),
-                tap(response => {
-                    // console.log(response);
-                    this.getAuthenticatedUser(response);
-                })
-            );
+  autoLogout(expirationTimeInMilliSeconds: number) {
+    this.autoLogoutTimer = setTimeout(() => {
+      this.logout();
+    }, expirationTimeInMilliSeconds);
+  }
+
+  private getAuthenticatedUser(response: AuthResponse) {
+    const tokenExpirationDate = new Date(
+      new Date().getTime() + parseInt(response.expiresIn) * 1000
+    );
+    const user = new User(
+      response.email,
+      response.localId,
+      response.idToken,
+      tokenExpirationDate
+    );
+
+    // console.log(user);
+
+    // preserve user in persistent storage at client.
+    if (user) {
+      const stringigyUser = JSON.stringify(user);
+
+      localStorage.setItem('userData', stringigyUser);
     }
 
-    logout() {
-        this.userAuthenticated.next(null);
-        this.router.navigate(['/auth']);
+    // set AutoLogout.
+    this.autoLogout(parseInt(response.expiresIn) * 1000);
+
+    this.userAuthenticated.next(user);
+  }
+
+  private handleError(errorRes) {
+    let message = 'An unknown error occured';
+
+    if (!errorRes || !errorRes.error || !errorRes.error.error) {
+      return throwError(message);
     }
 
-    private getAuthenticatedUser(response: AuthResponse) {
+    message = errorRes.error.error.message;
 
-        const tokenExpirationDate = new Date(new Date().getTime() + (parseInt(response.expiresIn) * 1000));
-        const user = new User(response.email, response.localId, response.idToken, tokenExpirationDate);
-
-        // console.log(user);
-
-        this.userAuthenticated.next(user);
+    switch (message) {
+      case 'EMAIL_EXISTS':
+        message = `Error - Email already exists`;
+        break;
+      case 'EMAIL_NOT_FOUND':
+        message = 'Email Id not Found';
+        break;
+      case 'INVALID_PASSWORD':
+        message = 'Invalid password';
+        break;
+      default:
+        break;
     }
 
-    private handleError(errorRes) {
-
-        let message = 'An unknown error occured';
-
-        if (!errorRes || !errorRes.error || !errorRes.error.error) {
-            return throwError(message);
-        }
-
-        message = errorRes.error.error.message;
-
-        switch (message) {
-            case 'EMAIL_EXISTS':
-                message = `Error - Email already exists`;
-                break;
-            case 'EMAIL_NOT_FOUND':
-                message = 'Email Id not Found';
-                break;
-            case 'INVALID_PASSWORD':
-                message = 'Invalid password';
-                break;
-            default:
-                break;
-        }
-
-        return throwError(message);
-
-    }
+    return throwError(message);
+  }
 }

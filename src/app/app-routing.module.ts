@@ -10,29 +10,37 @@ import { AuthComponent } from './auth/auth.component';
 
 import { RecipeResolver } from './shared/recipe.resolver';
 
-const routes: Routes =
-    [
-        { path: '', redirectTo: '/recipes', pathMatch: 'full' },
-        {
-            path: 'recipes',
-            component: RecipesComponent,
-            children: [
-                { path: '', component: RecipeStartComponent, resolve: [RecipeResolver] },
-                { path: 'new', component: RecipeEditComponent },
-                { path: ':id', component: RecipeDetailComponent, resolve: [RecipeResolver] },
-                { path: ':id/edit', component: RecipeEditComponent, resolve: [RecipeResolver] }
-            ]
-            // resolve: [RecipeResolver]
-        },
-        { path: 'shopping-list', component: ShoppingListComponent },
-        { path: 'auth', component: AuthComponent },
-        { path: '**', redirectTo: '/recipes' },
-    ];
+import { AuthGuard } from '../app/auth/auth.guard';
+
+const routes: Routes = [
+  { path: '', redirectTo: '/recipes', pathMatch: 'full' },
+  {
+    path: 'recipes',
+    component: RecipesComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: '', component: RecipeStartComponent, resolve: [RecipeResolver] },
+      { path: 'new', component: RecipeEditComponent },
+      {
+        path: ':id',
+        component: RecipeDetailComponent,
+        resolve: [RecipeResolver]
+      },
+      {
+        path: ':id/edit',
+        component: RecipeEditComponent,
+        resolve: [RecipeResolver]
+      }
+    ]
+    // resolve: [RecipeResolver]
+  },
+  { path: 'shopping-list', component: ShoppingListComponent },
+  { path: 'auth', component: AuthComponent },
+  { path: '**', redirectTo: '/recipes' }
+];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {
-
-}
+export class AppRoutingModule {}
