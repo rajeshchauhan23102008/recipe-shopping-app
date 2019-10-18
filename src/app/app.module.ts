@@ -16,6 +16,7 @@ import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component
 import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
 import { AuthComponent } from './auth/auth.component';
 import { LoaderComponent } from './shared/loader/loader.component';
+import { AlertComponent } from './shared/alert/alert.component';
 
 import { DropdownDirective } from './shared/dropdown.directive';
 import { ShoppingListService } from './shared/shoppinglist.service';
@@ -40,7 +41,8 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     RecipeEditComponent,
     RecipeStartComponent,
     AuthComponent,
-    LoaderComponent
+    LoaderComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,
@@ -50,11 +52,15 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [ShoppingListService, RecipeService, {
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
-    multi: true
-  }],
+  providers: [
+    ShoppingListService,
+    RecipeService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
