@@ -68,7 +68,7 @@ export class AuthService {
         expirationDate
       );
 
-      console.log(user);
+      // console.log(user);
 
       // set autologout().
       const expirationTimeInMilliSeconds =
