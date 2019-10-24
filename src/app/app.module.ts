@@ -19,9 +19,9 @@ import { HeaderComponent } from './header/header.component';
     HttpClientModule,
     SharedModule,
     CoreModule,
-    AuthModule,
-    RecipeModule,
-    ShoppingListModule,
+    // AuthModule,
+    // RecipeModule,
+    // ShoppingListModule,
     AppRoutingModule
   ],
   bootstrap: [AppComponent]
