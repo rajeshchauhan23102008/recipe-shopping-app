@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
 import { User } from './user.model';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { isPlatformBrowser } from '@angular/common';
 
 export interface AuthResponse {
   idToken: string;
@@ -22,7 +23,11 @@ export class AuthService {
   userAuthenticated: BehaviorSubject<User> = new BehaviorSubject<User>(null);
   autoLogoutTimer: any;
 
-  constructor(private httpClient: HttpClient, private router: Router) {}
+  constructor(
+    private httpClient: HttpClient,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId
+  ) {}
 
   signUp(email: string, password: string) {
     return this.httpClient
@@ -55,42 +60,46 @@ export class AuthService {
   }
 
   autoLogin() {
-    const stringfyUserData = localStorage.getItem('userData');
+    if (isPlatformBrowser(this.platformId)) {
+      const stringfyUserData = localStorage.getItem('userData');
 
-    if (stringfyUserData) {
-      const userObj = JSON.parse(stringfyUserData);
+      if (stringfyUserData) {
+        const userObj = JSON.parse(stringfyUserData);
 
-      const expirationDate = new Date(userObj._tokenExpirationDate);
+        const expirationDate = new Date(userObj._tokenExpirationDate);
 
-      const user = new User(
-        userObj.email,
-        userObj.Id,
-        userObj._token,
-        expirationDate
-      );
+        const user = new User(
+          userObj.email,
+          userObj.Id,
+          userObj._token,
+          expirationDate
+        );
 
-      // console.log(user);
+        // console.log(user);
 
-      // set autologout().
-      const expirationTimeInMilliSeconds =
-        expirationDate.getTime() - new Date().getTime();
+        // set autologout().
+        const expirationTimeInMilliSeconds =
+          expirationDate.getTime() - new Date().getTime();
 
-      this.autoLogout(expirationTimeInMilliSeconds);
+        this.autoLogout(expirationTimeInMilliSeconds);
 
-      this.userAuthenticated.next(user);
+        this.userAuthenticated.next(user);
+      }
     }
   }
 
   logout() {
-    localStorage.removeItem('userData');
-    this.userAuthenticated.next(null);
-    this.router.navigate(['/auth']);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('userData');
+      this.userAuthenticated.next(null);
+      this.router.navigate(['/auth']);
 
-    if (this.autoLogoutTimer) {
-      clearTimeout(this.autoLogoutTimer);
+      if (this.autoLogoutTimer) {
+        clearTimeout(this.autoLogoutTimer);
+      }
+
+      this.autoLogoutTimer = null;
     }
-
-    this.autoLogoutTimer = null;
   }
 
   autoLogout(expirationTimeInMilliSeconds: number) {
@@ -100,29 +109,31 @@ export class AuthService {
   }
 
   private getAuthenticatedUser(response: AuthResponse) {
-    const tokenExpirationDate = new Date(
-      new Date().getTime() + parseInt(response.expiresIn) * 1000
-    );
-    const user = new User(
-      response.email,
-      response.localId,
-      response.idToken,
-      tokenExpirationDate
-    );
+    if (isPlatformBrowser(this.platformId)) {
+      const tokenExpirationDate = new Date(
+        new Date().getTime() + parseInt(response.expiresIn) * 1000
+      );
+      const user = new User(
+        response.email,
+        response.localId,
+        response.idToken,
+        tokenExpirationDate
+      );
 
-    // console.log(user);
+      // console.log(user);
 
-    // preserve user in persistent storage at client.
-    if (user) {
-      const stringigyUser = JSON.stringify(user);
+      // preserve user in persistent storage at client.
+      if (user) {
+        const stringigyUser = JSON.stringify(user);
 
-      localStorage.setItem('userData', stringigyUser);
+        localStorage.setItem('userData', stringigyUser);
+      }
+
+      // set AutoLogout.
+      this.autoLogout(parseInt(response.expiresIn) * 1000);
+
+      this.userAuthenticated.next(user);
     }
-
-    // set AutoLogout.
-    this.autoLogout(parseInt(response.expiresIn) * 1000);
-
-    this.userAuthenticated.next(user);
   }
 
   private handleError(errorRes) {
